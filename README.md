@@ -75,6 +75,28 @@ Tests for this spec extension are included as `lib/resolution-races.js`.
 [wiki]: http://wiki.commonjs.org/wiki/Promises
 [timeout]: https://github.com/kriskowal/q/blob/c2c7353dfa5341b1f57bd5f4c3ac40064bf3e63f/q.js#L1445-1465
 
+### Always Async
+
+It's generally more predictable if you're guaranteed that your resolution callbacks are always called in a future turn
+of the event loop. This allows you to know the execution order of code like the following with confidence:
+
+```js
+console.log("1");
+
+promise.then(function () {
+    console.log("3");
+});
+
+console.log("2");
+```
+
+If a promise library does not guarantee asynchronicity, then in some cases the sequence will be 1, 2, 3, while in others
+it will be 1, 3, 2. This makes code hard to follow as your assumptions about what is true inside the callback do not
+always hold. Leading promise libraries are sure to always call resolution callbacks in the next turn of the event loop,
+using mechanisms like `process.nextTick` in Node or `setTimeout(..., 0)` in browsers.
+
+Tests for this spec extension are included as `lib/always-async.js`
+
 
 ## Room for Improvement
 
