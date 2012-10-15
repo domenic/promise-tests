@@ -77,8 +77,8 @@ Tests for this spec extension are included as `lib/resolution-races.js`.
 
 ### Always Async
 
-It's generally more predictable if you're guaranteed that your resolution callbacks are always called in a future turn
-of the event loop. This allows you to know the execution order of code like the following with confidence:
+It's generally more predictable if you're guaranteed that your handlers are always called in a future turn of the event
+loop. This allows you to know the execution order of code like the following with confidence:
 
 ```js
 console.log("1");
@@ -91,9 +91,20 @@ console.log("2");
 ```
 
 If a promise library does not guarantee asynchronicity, then in some cases the sequence will be 1, 2, 3, while in others
-it will be 1, 3, 2. This makes code hard to follow as your assumptions about what is true inside the callback do not
-always hold. Leading promise libraries are sure to always call resolution callbacks in the next turn of the event loop,
-using mechanisms like `process.nextTick` in Node or `setTimeout(..., 0)` in browsers.
+it will be 1, 3, 2. This makes code hard to follow as your assumptions about what is true inside the handler do not
+always hold.
+
+For example, consider a promise-returning library for storing data that does not guarantee asynchronicity. You may be
+using the `localStorage` backing store, which is always synchronous, leading you to expect the 1, 3, 2 sequence and
+write code that assumes changes were committed by the time 2 gets logged to the console. But later, you take advantage
+of this hypothetical library's great flexibility to switch to an `IndexedDB` backing store, which happens to be
+always-asynchronous. Now your code takes the 1, 2, 3 path, breaking your earlier assumption and introducing tons of
+subtle bugs.
+
+To avoid this problem, leading promise libraries are sure to always call handlers in the next turn of the event loop,
+using mechanisms like `process.nextTick` in Node or `setTimeout(..., 0)` in browsers. That way, promise producers can
+resolve their promises either synchronously or asynchronously, without worrying that promise consumers will face
+different behavior.
 
 Tests for this spec extension are included as `lib/always-async.js`
 
