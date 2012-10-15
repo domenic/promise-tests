@@ -26,6 +26,29 @@ to that adapter. (By default it runs the tests against Q.)
 [when.js]: https://github.com/cujojs/when
 
 
+## An Important Spec Extension
+
+There is, unfortunately, a very common and important behavior of thenables that is actually *not* in the Promises/A
+spec: what happens when one of your handlers returns a promise? For concreteness, let's use this example:
+
+```js
+var a = b.then(function () {
+    return c; // `c` is a promise
+});
+```
+
+Most implementations have converged on the answer that `a` should be resolved in the same way as `c`, i.e.
+
+- `a` should be fulfilled if and only if `c` is fulfilled, and with `c`'s fulfillment value
+- `a` should be rejected if and only if `c` is rejected, and with `c`'s rejection reason
+
+Unfortunately the Promises/A spec alone seems to imply that `a` should always be fulfilled, with the promise `c` as its
+fulfillment value!
+
+Tests for this are included in `lib/common-extensions.js` and can be run with `npm run test-extensions`, using the
+same adapter framework as above. Currently jQuery, Q, and when.js pass, while promise-stream fails.
+
+
 ## Room for Improvement
 
 I'd like this to run more easily in the browser, for libraries like [Ember][] or jQuery (even though in the latter case

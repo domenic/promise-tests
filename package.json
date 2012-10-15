@@ -17,6 +17,7 @@
     },
     "scripts": {
         "test": "mocha lib/promises-a.js --reporter spec",
+        "test-extensions": "mocha lib/common-extensions.js --reporter spec",
         "lint": "jshint lib"
     },
     "dependencies": {
