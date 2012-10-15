@@ -25,8 +25,13 @@ to that adapter. (By default it runs the tests against Q.)
 [Q]: https://github.com/kriskowal/q
 [when.js]: https://github.com/cujojs/when
 
+## Other Included Tests
 
-## An Important Spec Extension
+Promises/A is a rather bare spec. Most promise implementations have converged on certain semantics which make working
+with promises much more pleasant. Those tests are included in other files in the `lib` directory, and can be run with
+`npm run test-extensions`, although you will need to go manually edit the adapter lines as before.
+
+### Returning a Promise from a Handler
 
 There is, unfortunately, a very common and important behavior of thenables that is actually *not* in the Promises/A
 spec: what happens when one of your handlers returns a promise? For concreteness, let's use this example:
@@ -45,8 +50,29 @@ Most implementations have converged on the answer that `a` should be resolved in
 Unfortunately the Promises/A spec alone seems to imply that `a` should always be fulfilled, with the promise `c` as its
 fulfillment value!
 
-Tests for this are included in `lib/common-extensions.js` and can be run with `npm run test-extensions`, using the
-same adapter framework as above. Currently jQuery, Q, and when.js pass, while promise-stream fails.
+Tests for this spec extension are included as `lib/returning-a-promise.js`.
+
+### Resolution Races
+
+As described in the "Requirements" section of the [CommonJS wiki on Promises][wiki], number 3.2, you should be able to
+distribute the resolver to multiple mutually-suspicious consumers, and have them "race" to resolve the promise. This is
+somewhat analogous to the synchronous case where there can be a "race" between multiple `return` and `throw` statements
+within the same function. It's useful for implementing cases like a race between a timeout rejection and a normal
+resolution, as in Q's [`Q.timeout(promise, ms)`][timeout]. And it has some security implications in the
+[object-capability][] sense.
+
+In particular, this means that resolvers (i.e. someone with only the ability to fulfill or reject a promise) should not
+be able to observe the state of the promise so far. For example, attempting to resolve multiple times should not throw
+an error, since that would be a way for someone with only resolver capabilities to determine a promise's state. However,
+the Promises/A spec itself failed to capture this requirement, even though the CommonJS group considered it important,
+so implementations are still Promises/A conforming if they throw errors.
+
+Tests for this spec extension are included as `lib/resolution-races.js`.
+
+
+[object-capability]: http://en.wikipedia.org/wiki/Object-capability_model
+[wiki]: http://wiki.commonjs.org/wiki/Promises
+[timeout]: https://github.com/kriskowal/q/blob/c2c7353dfa5341b1f57bd5f4c3ac40064bf3e63f/q.js#L1445-1465
 
 
 ## Room for Improvement
