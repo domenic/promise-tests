@@ -1,0 +1,40 @@
+{
+    "name": "promise-tests",
+    "description": "A test suite for CommonJS Promises/A",
+    "version": "1.0.0",
+    "author": "Domenic Denicola <domenic@domenicdenicola.com> (http://domenicdenicola.com)",
+    "license": "WTFPL",
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/domenic/promise-tests.git"
+    },
+    "bugs": {
+        "url": "http://github.com/domenic/promise-tests/issues"
+    },
+    "main": "lib/tests.js",
+    "directories": {
+        "lib": "lib"
+    },
+    "scripts": {
+        "test": "mocha lib/promises-a.js --reporter spec",
+        "lint": "jshint lib"
+    },
+    "dependencies": {
+        "jquery-browserify": "*",
+        "jsdom": ">= 0.2.18",
+        "promise-stream": "*",
+        "q": "*",
+        "read-stream": "*",
+        "when": "*"
+    },
+    "devDependencies": {
+        "jshint": ">= 0.9.1",
+        "mocha": ">= 1.6.0",
+        "sinon": ">= 1.4.2"
+    },
+    "_dependencyComments": {
+        "jquery-browserify": "this is the most straightforward translation of jQuery on npm",
+        "jsdom": "for testing jQuery",
+        "read-stream": "for testing promise-stream"
+    }
+}
