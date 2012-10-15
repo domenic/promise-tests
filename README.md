@@ -25,6 +25,7 @@ to that adapter. (By default it runs the tests against Q.)
 [Q]: https://github.com/kriskowal/q
 [when.js]: https://github.com/cujojs/when
 
+
 ## Other Included Tests
 
 Promises/A is a rather bare spec. Most promise implementations have converged on certain semantics which make working
