@@ -19,8 +19,6 @@
         "lib": "lib"
     },
     "scripts": {
-        "test": "mocha lib/promises-a.js --reporter spec",
-        "test-extensions": "mocha lib/always-async.js lib/resolution-races.js lib/returning-a-promise.js --reporter spec",
         "lint": "jshint lib"
     },
     "dependencies": {
