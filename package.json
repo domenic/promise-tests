@@ -12,6 +12,9 @@
         "url": "http://github.com/domenic/promise-tests/issues"
     },
     "main": "lib/programmaticRunner.js",
+    "bin": {
+        "promise-tests": "lib/cli.js"
+    },
     "directories": {
         "lib": "lib"
     },
@@ -23,6 +26,7 @@
     "dependencies": {
         "mocha": ">= 1.6.0",
         "sinon": ">= 1.4.2",
+        "prompt": ">= 0.2.7",
 
         "jquery-browserify": "*",
         "promise-stream": "*",
