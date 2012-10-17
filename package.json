@@ -11,7 +11,7 @@
     "bugs": {
         "url": "http://github.com/domenic/promise-tests/issues"
     },
-    "main": "lib/tests.js",
+    "main": "lib/programmaticRunner.js",
     "directories": {
         "lib": "lib"
     },
