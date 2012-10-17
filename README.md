@@ -1,41 +1,69 @@
 # A Promises/A Test Suite
 
 Inspired by ["You're Missing the Point of Promises,"][essay] I wrote this test suite for the [CommonJS Promises/A][]
-spec. If you're not passing this, something's wrong.
+spec and some of its common extensions. If you're not passing this, something's wrong.
 
 
 [essay]: https://gist.github.com/3889970
 [CommonJS Promises/A]: http://wiki.commonjs.org/wiki/Promises/A
 
 
-## How It Works
+## How To Run
 
-The tests run in Node.js.
+The tests run in a Node.js environment; make sure you have that installed.
 
-You create an adapter in `lib/adapters`, reading the `README.md` file there for guidance. Then you change the `require`
-in `lib/promises-a.js` to point to your adapter. Then you run `npm test`.
+### Adapters
 
-So far we have adapters for [jQuery][] (fails), [promise-stream][] (fails), [Q][] (passes), and [when.js][] (passes).
-You can get the related libraries by running `npm install`, but you'll still have to manually switch the `require` over
-to that adapter. (By default it runs the tests against Q.)
+In order to test your promise library, you must expose a very minimal adapter interface. These are written as Node.js
+modules with a few well-known exports. Check out some examples in `lib/adapters`, and read the `README.md` file there
+for guidance and a more in-depth explanation.
 
+### From the CLI
 
-[jQuery]: http://api.jquery.com/category/deferred-object/
-[promise-stream]: https://github.com/Raynos/promise-stream
-[Q]: https://github.com/kriskowal/q
-[when.js]: https://github.com/cujojs/when
+This package comes with a command-line interface that can be used either by installing it globally with
+`npm install promise-tests -g` or by including it in your `package.json`'s `devDependencies` and using npm's `scripts`
+feature. In the latter case, your setup might look something like
+
+```json
+{
+    "devDependencies": {
+        "promise-tests": "*"
+    },
+    "scripts": {
+        "test": "run-my-own-tests && promise-tests all test/my-promise-tests-adapter"
+    }
+}
+```
+
+The CLI takes two arguments: the test suite you want to run (either `promises-a` or `all`), and the filename of your
+adapter file, relative to the current working directory. If either of these is missing, it will prompt you for them
+interactively.
+
+### Programmatically
+
+The main export of this package is a function that allows you to run the tests against an adapter:
+
+```js
+var promiseTests = require("promise-tests");
+
+promiseTests(adapter, ["promises-a"], function () {
+    // All done, output in the CLI.
+});
+```
+
+The second parameter is an array containing which tests you want to run (see below).
 
 
 ## Other Included Tests
 
 Promises/A is a rather bare spec. Most promise implementations have converged on certain semantics which make working
 with promises much more pleasant. Those tests are included in other files in the `lib` directory, and can be run with
-`npm run test-extensions`, although you will need to go manually edit the adapter lines as before.
+through the CLI with the `all` option, or individually with the programmatic option.
 
 ### Returning a Promise from a Handler
 
-There is, unfortunately, a very common and important behavior of thenables that is actually *not* in the Promises/A
-spec: what happens when one of your handlers returns a promise? For concreteness, let's use this example:
+There is, unfortunately, a very common and important behavior of thenables that is *not* in the Promises/A spec: what
+happens when one of your handlers returns a promise? For concreteness, let's use this example:
 
 ```js
 var a = b.then(function () {
@@ -51,7 +79,7 @@ Most implementations have converged on the answer that `a` should be resolved in
 Unfortunately the Promises/A spec alone seems to imply that `a` should always be fulfilled, with the promise `c` as its
 fulfillment value!
 
-Tests for this spec extension are included as `lib/returning-a-promise.js`.
+Tests for this spec extension are included as `returning-a-promise`.
 
 ### Resolution Races
 
@@ -68,7 +96,7 @@ an error, since that would be a way for someone with only resolver capabilities 
 the Promises/A spec itself failed to capture this requirement, even though the CommonJS group considered it important,
 so implementations are still Promises/A conforming if they throw errors.
 
-Tests for this spec extension are included as `lib/resolution-races.js`.
+Tests for this spec extension are included as `resolution-races`.
 
 
 [object-capability]: http://en.wikipedia.org/wiki/Object-capability_model
@@ -106,7 +134,7 @@ using mechanisms like `process.nextTick` in Node or `setTimeout(..., 0)` in brow
 resolve their promises either synchronously or asynchronously, without worrying that promise consumers will face
 different behavior.
 
-Tests for this spec extension are included as `lib/always-async.js`
+Tests for this spec extension are included as `always-async`
 
 
 ## Room for Improvement
@@ -114,13 +142,9 @@ Tests for this spec extension are included as `lib/always-async.js`
 I'd like this to run more easily in the browser, for libraries like [Ember][] or jQuery (even though in the latter case
 I've hacked together a [jsdom][]-based solution).
 
-I'd also like something less silly than requiring you to go in manually and change the adapter `require` line. Maybe
-a prompt, or maybe just loop through and run them all?
-
-Finally, it'd be cool to expand these tests to cover the behavior of deferreds, which are more or less the canonical
-promise-creation technique. There are a few subtleties there regarding resolving a deferred with a pending promise that
-not everyone gets right. That's beyond the scope of Promises/A, but there's a reason I named the repo "promise-tests"
-instead of "promises-a-tests" :).
+There are other spec extensions that would be useful to test, e.g. the behavior of deferreds, which are more or less the
+canonical promise-creation technique. There are a few subtleties there regarding resolving a deferred with a pending
+promise that not everyone gets right.
 
 
 [Ember]: https://github.com/emberjs/ember.js/commit/f7ac080db3a2a15f5814dc26fc86712cf7d252c8
