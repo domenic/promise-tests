@@ -21,17 +21,19 @@
         "lint": "jshint lib"
     },
     "dependencies": {
+        "mocha": ">= 1.6.0",
+        "sinon": ">= 1.4.2",
+
         "jquery-browserify": "*",
-        "jsdom": ">= 0.2.18",
         "promise-stream": "*",
         "q": "*",
-        "read-stream": "*",
-        "when": "*"
+        "when": "*",
+
+        "jsdom": ">= 0.2.18",
+        "read-stream": "*"
     },
     "devDependencies": {
-        "jshint": ">= 0.9.1",
-        "mocha": ">= 1.6.0",
-        "sinon": ">= 1.4.2"
+        "jshint": ">= 0.9.1"
     },
     "_dependencyComments": {
         "jquery-browserify": "this is the most straightforward translation of jQuery on npm",
