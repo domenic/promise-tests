@@ -1,7 +1,7 @@
 {
     "name": "promise-tests",
     "description": "A test suite for CommonJS Promises/A and related spec extensions",
-    "version": "2.0.1",
+    "version": "2.1.0",
     "author": "Domenic Denicola <domenic@domenicdenicola.com> (http://domenicdenicola.com)",
     "license": "WTFPL",
     "repository": {
