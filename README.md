@@ -7,6 +7,19 @@ spec and some of its common extensions. If you're not passing this, something's 
 [essay]: https://gist.github.com/3889970
 [CommonJS Promises/A]: http://wiki.commonjs.org/wiki/Promises/A
 
+## Deprecation Notice
+
+**This test suite is no longer maintained.** It has been superceded by the [Promises/A+ test suite][], which tests
+against the much better [Promises/A+ spec][]. That spec takes more care with various edge cases, and subsumes most of
+the common extensions listed under "Other Included Tests" below. And the test suite is much more comprehensive, as well.
+
+Nevertheless, the original README is left below for historical interest. But please, switch!
+
+[Promises/A+ test suite]: https://npmjs.org/package/promises-aplus-tests
+[Promises/A+ spec]: http://promises-aplus.github.com/promises-spec/
+
+---
+
 
 ## How To Run
 
